@@ -28,7 +28,7 @@ begin
 	elsif TG_OP = 'DELETE' then
 		insert into cursoAuditoria(codigoCursoAutidoria, operacao, codigoCurso, totalCreditosOld, totalCreditosNew, totalHorasOld, totalHorasNew, totalHorasObrigatoriasOld, totalHorasObrigatoriasNew, codigoDepartamentoOld, codigoDepartamentoNew, usuario)
 		values (nextval('cursoAuditoria_seq'), TG_OP, old.codigoCurso, old.totalCreditos, null, old.totalHoras, null, old.totalHorasObrigatorias, null, old.codigoDepartamento, null, null);
-	end	if;
+	end if;
 	return new;
 end
 $$ language 'plpsql';
