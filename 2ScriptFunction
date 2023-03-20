@@ -1,0 +1,14 @@
+create or replace function professor_disciplina (cdProfessor int, cdDisciplina int)
+returns int as $$ 
+declare 
+	habilitadoCFE int;
+begin 
+	select count(*) from professordisciplina
+	inner join professor on (professor.codigoprofessor = professordisciplina.codigoprofessor)
+	inner join disciplina on (disciplina.codigodisciplina = professordisciplna.codigodisciplna)
+	where professor.codigoprofessor = cdProfessor 
+	and professor.codigoprofessor = cdDisciplina 
+	
+	return habilitadoCFE;
+end
+$$ language 'plpgsql';
