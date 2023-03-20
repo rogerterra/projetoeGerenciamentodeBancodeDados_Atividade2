@@ -7,7 +7,7 @@ begin
 	offsetTotalHoras := 0;
 	loop
 		cdTotalHoras := (select totalHorasDisponiveis from professorHorista where codigoDepartamento  = cdDepartamento and HabilitadoCFE = 1 limit 1 offset offsetHabilitadoCFE);
-    	if (cdTotalHoras is null) then
+		if (cdTotalHoras is null) then
 			exit;
 		end if;
 		insert into professorhorista (codigoProfessorHorista, totalHorasDisponiveis, codigoProfessor, usuarioUltimaAtualizacao, dataUltimaAtualizacao)	
