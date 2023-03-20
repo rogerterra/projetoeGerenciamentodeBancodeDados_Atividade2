@@ -1,0 +1,39 @@
+create table cursoAuditoria (
+	codigoCursoAuditoria int not null primary key, 
+	operacao varchar(50) not null
+	codigoCurso int not null,
+	totalCreditosOld int,
+	totalCreditosNew int, 
+	totalHorasOld int, 
+	totalHorasNew int, 
+	totalHorasObrigatoriasOld int,
+	totalHorasObrigatoriasNew int,
+	codigoDepartamentoOld int, 
+	codigoDepartamentoNew int, 
+	data timestamp not null default now(),
+	usuario int
+);
+
+create sequence cursoAuditoria_seq start 1 increment 1 owned by cursoAuditoria.codigoCursoAuditoria;
+
+create or replace function auditoria_curso()
+returns trigger as $$
+begin
+	if TG_OP = 'INSERT' then 
+		insert into cursoAuditoria(codigoCursoAutidoria, operacao, codigoCurso, totalCreditosOld, totalCreditosNew, totalHorasOld, totalHorasNew, totalHorasObrigatoriasOld, totalHorasObrigatoriasNew, codigoDepartamentoOld, codigoDepartamentoNew, usuario)
+		values (nextval('cursoAuditoria_seq'), TG_OP, new.codigoCurso, null, new.totalCreditos, null, new.totalHoras, null, new.totalHorasObrigatorias, null, new.codigoDepartamento, new.UltimaAtualizacao);
+	elsif TG_OP = 'UPDATE' then
+		insert into cursoAuditoria(codigoCursoAutidoria, operacao, codigoCurso, totalCreditosOld, totalCreditosNew, totalHorasOld, totalHorasNew, totalHorasObrigatoriasOld, totalHorasObrigatoriasNew, codigoDepartamentoOld, codigoDepartamentoNew, usuario)
+		values (nextval('cursoAuditoria_seq'), TG_OP, new.codigoCurso, old.totalCreditos, new.totalCreditos, old.totalHoras, new.totalHoras, old.totalHorasObrigatorias, new.totalHorasObrigatorias, old.codigoDepartamento, new.codigoDepartamento, new.UltimaAtualizacao);
+	elsif TG_OP = 'DELETE' then
+		insert into cursoAuditoria(codigoCursoAutidoria, operacao, codigoCurso, totalCreditosOld, totalCreditosNew, totalHorasOld, totalHorasNew, totalHorasObrigatoriasOld, totalHorasObrigatoriasNew, codigoDepartamentoOld, codigoDepartamentoNew, usuario)
+		values (nextval('cursoAuditoria_seq'), TG_OP, old.codigoCurso, old.totalCreditos, null, old.totalHoras, null, old.totalHorasObrigatorias, null, old.codigoDepartamento, null, null);
+	end	if;
+	return new;
+end
+$$ language 'plpsql';
+
+create trigger trigger_auditoria_curso
+after insert or update or delete on curso
+for each row 
+execute procedure auditoria_curso();
