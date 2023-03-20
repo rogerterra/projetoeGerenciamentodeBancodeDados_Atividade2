@@ -1,0 +1,9 @@
+create or replace view view_cursos_disciplinas_departamento as
+select
+	departamento.nome as nomeDepartamento,
+	curso.nome as nomeCurso,
+	disciplina.nome as nomeDisciplina
+from departamento
+inner join departamento on (curso.codigoDepartamento = departamento.codigoDepartamento ),
+inner join curso on (disciplinacurso.codigoCurso = curso.codigoCurso),
+inner join disciplina on (disciplinaCurso.codigodisciplina = disciplina.codigodisciplina)
